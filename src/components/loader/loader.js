@@ -1,12 +1,13 @@
 import React from 'react';
-import './loader.module.css';
+import s from './loader.module.css';
+import img from './loader.gif';
 
 const Loader = () => {
-    return (
-        <div className="loadingio-spinner-spinner-led01qmzza"><div className="ldio-jhfve4cp6w">
-            <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-        </div></div>
-    )
+  return (
+    <>
+      <img src={img} className={s.img}/>
+    </>
+  )
 };
 
 export default Loader;

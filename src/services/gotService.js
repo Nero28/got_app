@@ -39,33 +39,41 @@ export default class GotService {
         return this.getResource(`/houses/${id}/`);
     }
 
-    _transformCharacter(char) {
-        return {
-            name: char.name,
-            gender: char.gender,
-            born: char.born,
-            died: char.died,
-            culture: char.culture,
+    isSet(data) {
+        if (data) {
+            return data;
+        } else {
+            return 'No data :(';
         }
     }
 
-    _transformHouse(house) {
+    _transformCharacter = (char) => {
         return {
-            name: house.name,
-            region: house.name,
-            words: house.words,
-            titles: house.titles,
-            overloard: house.overloard,
-            ancestralWeapons: house.ancestralWeapons,
+            name: this.isSet(char.name),
+            gender: this.isSet(char.gender),
+            born: this.isSet(char.born),
+            died: this.isSet(char.died),
+            culture: this.isSet(char.culture),
         }
     }
 
-    _transformBook(book) {
+    _transformHouse = (house) => {
         return {
-            name: book.name,
-            numberOfPages: book.numberOfPages,
-            publiser: book.publiser,
-            released: book.released,
+            name: this.isSet(house.name),
+            region: this.isSet(house.name),
+            words: this.isSet(house.words),
+            titles: this.isSet(house.titles),
+            overloard: this.isSet(house.overloard),
+            ancestralWeapons: this.isSet(house.ancestralWeapons),
+        }
+    }
+
+    _transformBook = (book) => {
+        return {
+            name: this.isSet(book.name),
+            numberOfPages: this.isSet(book.numberOfPages),
+            publiser: this.isSet(book.publiser),
+            released: this.isSet(book.released),
         }
     }
 }
