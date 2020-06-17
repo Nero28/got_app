@@ -13,29 +13,29 @@ export default class GotService {
         return await res.json();
     }
 
-    getAllBooks() {
+    getAllBooks = async () => {
         return this.getResource(`/books/`);
     }
 
-    getBook(id) {
+    getBook = async (id) => {
         return this.getResource(`/books/${id}/`);
     }
 
-    async getAllCharacters() {
+    getAllCharacters = async () => {
         const res = await this.getResource(`/characters?page=5&pageSize=10`);
         return res.map(this._transformCharacter);
     }
 
-    async getCharacter(id) {
+    getCharacter = async (id) => {
         const character = await this.getResource(`/characters/${id}`);
         return this._transformCharacter(character);
     }
 
-    getAllHouses() {
+    getAllHouses = async () => {
         return this.getResource(`/houses/`);
     }
 
-    getHouse(id) {
+    getHouse = async (id) => {
         return this.getResource(`/houses/${id}/`);
     }
 
@@ -46,9 +46,14 @@ export default class GotService {
             return 'No data :(';
         }
     }
+    _extractId = (item) => {
+        const idRegExp = /\/([0-9]*)$/;
+        return item.url.match(idRegExp)[1];
+    }
 
     _transformCharacter = (char) => {
         return {
+            id:this._extractId(char),
             name: this.isSet(char.name),
             gender: this.isSet(char.gender),
             born: this.isSet(char.born),

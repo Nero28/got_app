@@ -4,10 +4,13 @@ import Header from '../header/header';
 import RandomChar from '../randomChar/randomChar';
 import ErrorMessage from '../errorMessage/errorMessage';
 import CharacterPage from '../characterPage/characterPage';
-
+import ItemList from '../itemList/itemList';
+import ItemDetails from '../itemDetails/itemDetails';
+import gotService from '../../services/gotService';
 
 export default class App extends React.Component {
 
+    gotService = new gotService();
 
     state = {
         toggleVisibleRandomChar: true,
@@ -30,7 +33,7 @@ export default class App extends React.Component {
         })
     }
 
- 
+
     render() {
         const { toggleVisibleRandomChar, error } = this.state;
         if (error) {
@@ -42,8 +45,6 @@ export default class App extends React.Component {
             <>
                 <Container>
                     <Header />
-                </Container>
-                <Container>
                     <Row>
                         <Col lg={{ size: 5, offset: 0 }}>
                             {char}
@@ -53,6 +54,30 @@ export default class App extends React.Component {
 
                     </Row>
                     <CharacterPage />
+                    <Row>
+                        <Col md='6'>
+                            <ItemList
+                             onItemSelected={this.onItemSelected}
+                             getData={this.gotService.getAllBooks}
+                             renderItem={(item) => item.name}
+                         />
+                        </Col>
+                        <Col md='6'>
+                            <ItemDetails itemId={this.state.selectedItem} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md='6'>
+                            <ItemList 
+                            onItemSelected={this.onItemSelected}
+                            getData={this.gotService.getAllHouses}
+                            renderItem={(item) =>item.name}
+                             />
+                        </Col>
+                        <Col md='6'>
+                            <ItemDetails itemId={this.state.selectedItem} />
+                        </Col>
+                    </Row>
                 </Container>
             </>
         );

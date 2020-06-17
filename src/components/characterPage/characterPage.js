@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import './characterPage.module.css';
-import { Col, Row } from 'reactstrap';
 import ItemList from '../itemList/itemList';
-import CharDetails from '../charDetails/charDetails';
+import ItemDetails,{Field} from '../itemDetails/itemDetails';
 import ErrorMessage from '../errorMessage/errorMessage';
-
+import gotService from '../../services/gotService';
+import RowBlock from '../rowBlock/rowBlock';
 
 export default class CharacterPage extends Component {
+    gotService = new gotService();
+
     state = {
-        selectedChar: 130,
-        error:false,
+        selectedItem: 130,
+        error: false,
     }
 
 
-    onCharSelected = (id) => {
-        this.setState({ 
-            selectedChar: id
+    onItemSelected = (id) => {
+        this.setState({
+            selectedItem: id
         })
     }
 
@@ -25,22 +27,30 @@ export default class CharacterPage extends Component {
         })
     }
 
+
+
     render() {
         const { error } = this.state;
         if (error) {
             return <ErrorMessage />
         }
+        const itemList = (
+            <ItemList onItemSelected={this.onItemSelected}
+                getData={this.gotService.getAllCharacters}
+                renderItem={({ name, gender }) => `${name} (${gender})`} />
+        );
+
+        const charDetails = (
+            <ItemDetails itemId={this.state.selectedItem} >
+                <Field field='gender' label='Gender' />
+                <Field field='born' label='Born' />
+                <Field field='died' label='Died' />
+                <Field field='culture' label='Culture' />
+            </ItemDetails>
+        );
+
         return (
-            <>
-                <Row>
-                    <Col md='6'>
-                        <ItemList onCharSelected={this.onCharSelected} />
-                    </Col>
-                    <Col md='6'>
-                        <CharDetails charId={this.state.selectedChar} />
-                    </Col>
-                </Row>
-            </>
+            <RowBlock left={itemList} right={charDetails} />
         )
     }
 }
