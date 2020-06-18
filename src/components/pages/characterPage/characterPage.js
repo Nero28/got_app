@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './characterPage.module.css';
-import ItemList from '../itemList/itemList';
-import ItemDetails,{Field} from '../itemDetails/itemDetails';
-import ErrorMessage from '../errorMessage/errorMessage';
-import gotService from '../../services/gotService';
-import RowBlock from '../rowBlock/rowBlock';
+import ItemList from '../../itemList/itemList';
+import ItemDetails, { Field } from '../../itemDetails/itemDetails';
+import ErrorMessage from '../../errorMessage/errorMessage';
+import gotService from '../../../services/gotService';
+import RowBlock from '../../rowBlock/rowBlock';
 
 export default class CharacterPage extends Component {
     gotService = new gotService();
@@ -40,8 +40,10 @@ export default class CharacterPage extends Component {
                 renderItem={({ name, gender }) => `${name} (${gender})`} />
         );
 
-        const charDetails = (
-            <ItemDetails itemId={this.state.selectedItem} >
+        const itemDetails = (
+            <ItemDetails itemId={this.state.selectedItem}
+              getMethod={this.gotService.getCharacter}
+            >
                 <Field field='gender' label='Gender' />
                 <Field field='born' label='Born' />
                 <Field field='died' label='Died' />
@@ -50,7 +52,7 @@ export default class CharacterPage extends Component {
         );
 
         return (
-            <RowBlock left={itemList} right={charDetails} />
+            <RowBlock left={itemList} right={itemDetails} />
         )
     }
 }

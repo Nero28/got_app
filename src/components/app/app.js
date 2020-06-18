@@ -3,17 +3,17 @@ import { Col, Row, Container, Button } from 'reactstrap';
 import Header from '../header/header';
 import RandomChar from '../randomChar/randomChar';
 import ErrorMessage from '../errorMessage/errorMessage';
-import CharacterPage from '../characterPage/characterPage';
-import ItemList from '../itemList/itemList';
-import ItemDetails from '../itemDetails/itemDetails';
+import CharacterPage from '../pages/characterPage/characterPage';
 import gotService from '../../services/gotService';
+import HousePage from '../pages/housePage/housePage';
+import BookPage from '../pages/bookPage/bookPage';
 
 export default class App extends React.Component {
 
     gotService = new gotService();
 
     state = {
-        toggleVisibleRandomChar: true,
+        toggleVisibleRandomItem: true,
         error: false,
     }
 
@@ -25,21 +25,22 @@ export default class App extends React.Component {
         })
     }
 
-    onToggleRandomChar = () => {
+    onToggleRandomItem = () => {
         this.setState((state) => {
             return {
-                toggleVisibleRandomChar: !state.toggleVisibleRandomChar
+                toggleVisibleRandomItem: !state.toggleVisibleRandomItem,
+
             }
         })
     }
 
 
     render() {
-        const { toggleVisibleRandomChar, error } = this.state;
+        const { toggleVisibleRandomItem, error } = this.state;
         if (error) {
             return <ErrorMessage />
         }
-        const char = toggleVisibleRandomChar ? <RandomChar /> : null;
+        const char = toggleVisibleRandomItem ? <RandomChar /> : null;
 
         return (
             <>
@@ -48,36 +49,14 @@ export default class App extends React.Component {
                     <Row>
                         <Col lg={{ size: 5, offset: 0 }}>
                             {char}
-                            <Button color="info" onClick={this.onToggleRandomChar}
+                            <Button color="info" onClick={this.onToggleRandomItem}
                             >Toggle random char</Button>
                         </Col>
 
                     </Row>
                     <CharacterPage />
-                    <Row>
-                        <Col md='6'>
-                            <ItemList
-                             onItemSelected={this.onItemSelected}
-                             getData={this.gotService.getAllBooks}
-                             renderItem={(item) => item.name}
-                         />
-                        </Col>
-                        <Col md='6'>
-                            <ItemDetails itemId={this.state.selectedItem} />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md='6'>
-                            <ItemList 
-                            onItemSelected={this.onItemSelected}
-                            getData={this.gotService.getAllHouses}
-                            renderItem={(item) =>item.name}
-                             />
-                        </Col>
-                        <Col md='6'>
-                            <ItemDetails itemId={this.state.selectedItem} />
-                        </Col>
-                    </Row>
+                    <HousePage />
+                    <BookPage />
                 </Container>
             </>
         );

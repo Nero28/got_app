@@ -19,7 +19,7 @@ export {
 }
 
 export default class ItemDetails extends Component {
-    gotService = new gotService();
+   // gotService = new gotService();
     state = {
         item: null,
     }
@@ -35,11 +35,11 @@ export default class ItemDetails extends Component {
     }
 
     updateItem() {
-        const { itemId } = this.props;
+        const { itemId,getMethod } = this.props;
         if (!itemId) {
             return;
         }
-        this.gotService.getCharacter(itemId)
+        getMethod(itemId)
             .then((item) => {
                 this.setState({ item })
             })
@@ -50,13 +50,13 @@ export default class ItemDetails extends Component {
 
     render() {
         if (!this.state.item) {
-            return <span className='select-error'>Please select a character!</span>
+            return <span className='select-error'>Please select a item!</span>
         }
         const { item } = this.state;
         const { name } = item;
 
         return (
-            <div className="char-details rounded">
+            <div className="item-details rounded">
                 <h4>{name}</h4>
                 <ul className="list-group list-group-flush">
                     {
