@@ -3,9 +3,10 @@ import './randomChar.module.css';
 import gotService from '../../services/gotService';
 import Loader from '../loader/loader.js';
 import ErrorMessage from '../errorMessage/errorMessage.js';
+import PropTypes from 'prop-types';
 
 export default class RandomChar extends Component {
-    
+
     gotService = new gotService();
 
     state = {
@@ -13,10 +14,17 @@ export default class RandomChar extends Component {
         loading: true,
         error: false,
     }
+    static propsTypes = {
+        interval: PropTypes.number
+    }
+
+    static defaultProps = {
+        interval: 15000
+    }
 
     componentDidMount() {
         this.updateChar();
-        this.timerId = setInterval(this.updateChar, 1500);
+        this.timerId = setInterval(this.updateChar, this.props.interval);
     }
 
     componentWillUnmount() {
@@ -66,6 +74,8 @@ export default class RandomChar extends Component {
         );
     }
 }
+
+
 
 const View = ({ char }) => {
     const { name, gender, born, died, culture } = char;

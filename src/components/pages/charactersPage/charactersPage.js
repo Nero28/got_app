@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import './bookPage.module.css';
+import './charactersPage.module.css';
 import ItemList from '../../itemList/itemList';
 import ItemDetails, { Field } from '../../itemDetails/itemDetails';
 import ErrorMessage from '../../errorMessage/errorMessage';
 import gotService from '../../../services/gotService';
 import RowBlock from '../../rowBlock/rowBlock';
+//import withData from '../../withData/withData';
 
-export default class BookPage extends Component {
+
+export default class CharactersPage extends Component {
     gotService = new gotService();
 
     state = {
-        selectedItem: 1,
+        selectedItem: null,
         error: false,
     }
 
@@ -34,25 +36,24 @@ export default class BookPage extends Component {
         if (error) {
             return <ErrorMessage />
         }
-        const itemList = (
-            <ItemList onItemSelected={this.onItemSelected}
-                getData={this.gotService.getAllBooks}
-                renderItem={({ name, gender }) => `${name} (${gender})`} />
-        );
+        const itemList = <ItemList
+            onItemSelected={this.onItemSelected}
+            getData={this.gotService.getAllCharacters}
+            renderItem={({ name, gender }) => `${name} (${gender})`} />;
 
-        const charDetails = (
+        const itemDetails = (
             <ItemDetails itemId={this.state.selectedItem}
-                getMethod={this.gotService.getBook}>
-                <Field field='isbn' label='ISBN' />
-                <Field field='authors' label='Authors' />
-                <Field field='numberOfPages' label='NumberOfPages' />
-                <Field field='publiser' label='Publiser' />
-                <Field field='released' label='Released' />
+                getMethod={this.gotService.getCharacter}
+            >
+                <Field field='gender' label='Gender' />
+                <Field field='born' label='Born' />
+                <Field field='died' label='Died' />
+                <Field field='culture' label='Culture' />
             </ItemDetails>
         );
 
         return (
-            <RowBlock left={itemList} right={charDetails} />
+            <RowBlock left={itemList} right={itemDetails} />
         )
     }
 }

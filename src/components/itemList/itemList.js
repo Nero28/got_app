@@ -1,54 +1,59 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import './itemList.module.css';
 import Loader from '../loader/loader.js';
 import ErrorMessage from '../errorMessage/errorMessage.js';
+import PropTypes from 'prop-types';
+import gotService from '../../services/gotService';
+import withData from '../withData/withData';
 
-export default class ItemList extends Component {
+const ItemList = ({ getData, onItemSelected, renderItem }) => {
 
+    const [itemList, updateList] = useState([]);
 
-
-    state = {
-        itemList: null,
-    }
-
-    componentDidMount() {
-        const { getData } = this.props;
-
+    useEffect(() => {
         getData()
-            .then((itemList) => {
-                this.setState({ itemList })
+            .then((data) => {
+                updateList(data);
             })
-    }
 
+    },[])
 
-    renderItems(arr) {
-        return arr.map((item) => {
-            const { id } = item;
-            const label =this.props.renderItem(item);
-            return (
-                <li
-                    key={id}
-                    className="list-group-item"
-                    onClick={() => this.props.onItemSelected(id)}
-                >
-                    {label}
-                </li>
-            )
-        })
-    }
-
-
-    render() {
-        const { itemList } = this.state;
-        if (!itemList) {
-            return <Loader />
-        }
-
-        const items = this.renderItems(itemList);
-        return (
-            <ul className="item-list list-group">
-                {items}
-            </ul>
-        );
-    }
+    ItemList.defaultProps = {
+    onItemSelected: () => { }
 }
+
+    ItemList.propTypes = {
+    onItemSelected: PropTypes.func
+}
+
+
+const renderItems=(arr) =>{
+    return arr.map((item) => {
+        const { id } = item;
+        const label = renderItem(item);
+        return (
+            <li
+                key={id}
+                className="list-group-item"
+                onClick={() => onItemSelected(id)}
+            >
+                {label}
+            </li>
+        )
+    })
+}
+
+
+    if (!itemList) {
+        return <Loader />
+    }
+    const items = renderItems(itemList);
+    return (
+        <ul className="item-list list-group">
+            {items}
+        </ul>
+    );
+
+};
+
+export default ItemList;
